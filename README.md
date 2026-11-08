@@ -4,7 +4,7 @@ Landing page de um escritório de arquitetura de alto padrão, do conceito ao c�
 
 Fiz o processo inteiro, como faria num projeto real: briefing, identidade visual, arquitetura de informação, layout no Figma e desenvolvimento front-end.
 
-<!-- Depois do deploy, troque pela URL da Vercel: **[Ver o site →](https://seu-link.vercel.app)** -->
+[Ver o site →](https://cota-arquitetura.vercel.app/)
 
 ![Hero com vídeo da Casa Lagoa ao anoitecer e o CTA "Agendar conversa"](docs/hero.jpg)
 
