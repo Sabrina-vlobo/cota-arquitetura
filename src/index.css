@@ -1,0 +1,630 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   COTA · tokens
+   ------------------------------------------------------------------ */
+@theme {
+  --color-nevoa: #f3f5f7;
+  --color-noite: #0f1a2b;
+  --color-grafite: #18171c;
+  --color-ardosia: #4b6884;
+  --color-aco: #2f5f8f;
+  --color-aco-escuro: #244b72;
+  --color-ceu: #98bfdb;
+  --color-ceu-claro: #b6d3e7;
+  --color-linha-claro: #d5dce3;
+  --color-linha-escuro: #233a52;
+  --color-pedra: #e4e9ee;
+  --color-prancha: #1b3a5c;
+  --color-prancha-escura: #142d48;
+
+  --font-sans: "Archivo Variable", "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* ------------------------------------------------------------------
+   Base e superfícies do navegador
+   ------------------------------------------------------------------ */
+@layer base {
+  /* Tailwind 4 deixa o cursor padrão em botões; aqui tudo que é clicável vira mãozinha. */
+  button,
+  [role="button"],
+  [role="tab"],
+  [role="option"],
+  summary,
+  select,
+  label[for],
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
+  :disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+  html {
+    background: var(--color-noite);
+    color: var(--color-grafite);
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-nevoa);
+    font-feature-settings: "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-ceu);
+    color: var(--color-noite);
+  }
+  input,
+  textarea {
+    caret-color: var(--color-ceu);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-aco);
+    outline-offset: 3px;
+  }
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: var(--color-ceu);
+  }
+  a {
+    text-underline-offset: 0.25em;
+    text-decoration-thickness: 1px;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------------
+   Botão: retorno tátil
+   ------------------------------------------------------------------ */
+.btn {
+  transition:
+    background-color 200ms ease,
+    transform 160ms var(--ease-out-strong);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn .btn-arrow {
+  transition: transform 220ms var(--ease-out-strong);
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover .btn-arrow {
+    transform: translateX(3px);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Hero · abertura (só com movimento liberado e na primeira visita)
+   O conteúdo é visível por padrão; a animação só existe por cima.
+   ------------------------------------------------------------------ */
+@keyframes rise {
+  from {
+    transform: translateY(105%);
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes fade-blur {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+}
+@keyframes draw-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes draw-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes settle {
+  from {
+    transform: scale(1.06);
+  }
+}
+@keyframes stroke-in {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes label-in {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+  }
+}
+@keyframes cota-rest {
+  to {
+    opacity: 0.65;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.no-intro) .intro-photo {
+    animation: settle 1800ms var(--ease-out-expo) both;
+  }
+  html:not(.no-intro) .intro-line-y {
+    transform-origin: top;
+    animation: draw-y 1100ms var(--ease-in-out-strong) both;
+    animation-delay: var(--d, 0ms);
+  }
+  html:not(.no-intro) .intro-line-x {
+    transform-origin: left;
+    animation: draw-x 1100ms var(--ease-in-out-strong) both;
+    animation-delay: var(--d, 0ms);
+  }
+  html:not(.no-intro) .intro-rise {
+    animation: rise 900ms var(--ease-out-expo) both;
+    animation-delay: var(--d, 0ms);
+  }
+  html:not(.no-intro) .intro-fade {
+    animation: fade-up 700ms var(--ease-out-expo) both;
+    animation-delay: var(--d, 0ms);
+  }
+  html:not(.no-intro) .intro-blur {
+    animation: fade-blur 800ms var(--ease-out-expo) both;
+    animation-delay: var(--d, 0ms);
+  }
+  /* Cotas do hero: desenham, depois descansam em opacidade baixa */
+  html:not(.no-intro) .intro-cota {
+    animation:
+      fade-blur 400ms ease both,
+      cota-rest 900ms ease 2600ms forwards;
+    animation-delay: var(--d, 0ms), 2600ms;
+  }
+  html:not(.no-intro) .intro-cota path {
+    stroke-dasharray: 1;
+    animation: stroke-in 1000ms var(--ease-in-out-strong) both;
+    animation-delay: var(--d, 0ms);
+  }
+}
+html.no-intro .intro-cota {
+  opacity: 0.65;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-cota {
+    opacity: 0.65;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Manifesto: as palavras acendem conforme o scroll
+   (CSS scroll-driven; sem suporte, o texto aparece inteiro)
+   ------------------------------------------------------------------ */
+@keyframes word-light {
+  from {
+    color: color-mix(in oklab, var(--color-ardosia) 38%, var(--color-nevoa));
+  }
+  to {
+    color: var(--color-grafite);
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .manifesto {
+      view-timeline: --manifesto block;
+    }
+    .manifesto .w {
+      animation: word-light linear both;
+      animation-timeline: --manifesto;
+      animation-range: cover calc(18% + var(--p) * 34%) cover calc(22% + var(--p) * 34%);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   Revelações por recorte (o "vão" que se abre)
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-clip {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 1000ms var(--ease-in-out-strong);
+    transition-delay: var(--d, 0ms);
+  }
+  .reveal-clip img {
+    transform: scale(1.08);
+    transition: transform 1400ms var(--ease-out-expo);
+    transition-delay: var(--d, 0ms);
+  }
+  [data-inview="true"] .reveal-clip,
+  [data-inview="true"].reveal-clip {
+    clip-path: inset(0 0 0 0);
+  }
+  [data-inview="true"] .reveal-clip img,
+  [data-inview="true"].reveal-clip img {
+    transform: scale(1);
+  }
+  .reveal-fade {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 800ms var(--ease-out-expo),
+      transform 800ms var(--ease-out-expo);
+    transition-delay: var(--d, 0ms);
+  }
+  [data-inview="true"] .reveal-fade {
+    opacity: 1;
+    transform: none;
+  }
+  .line-draw {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1200ms var(--ease-in-out-strong);
+  }
+  [data-inview="true"] .line-draw {
+    transform: scaleX(1);
+  }
+}
+
+/* Zoom leve nas fotos dos projetos, só com mouse */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .project-card .zoom {
+    transition: transform 700ms var(--ease-out-expo);
+  }
+  .project-card:hover .zoom {
+    transform: scale(1.03);
+  }
+}
+
+/* Parallax leve do projeto em destaque (scroll-driven) */
+@keyframes drift {
+  from {
+    transform: translateY(-4%) scale(1.1);
+  }
+  to {
+    transform: translateY(4%) scale(1.1);
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .parallax {
+      animation: drift linear both;
+      animation-timeline: view();
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   Desenho técnico dos serviços
+   ------------------------------------------------------------------ */
+@keyframes draw-path {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* Só esconde os traços depois de medidos; sem JS, o desenho aparece inteiro. */
+  .drawing[data-measured="true"] [data-draw] {
+    stroke-dasharray: calc(var(--len) * 1px) calc(var(--len) * 1px);
+    stroke-dashoffset: calc(var(--len) * 1px);
+  }
+  [data-inview="true"] .drawing[data-measured="true"] [data-draw] {
+    animation: draw-path 900ms var(--ease-in-out-strong) forwards;
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
+  .drawing .dim-label {
+    opacity: 0;
+  }
+  [data-inview="true"] .drawing .dim-label {
+    animation: label-in 500ms var(--ease-out-expo) forwards;
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .drawing {
+    animation: fade-blur 200ms ease both;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Diálogo de projeto
+   ------------------------------------------------------------------ */
+dialog.project-dialog {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 220ms var(--ease-out-strong),
+    transform 220ms var(--ease-out-strong),
+    overlay 220ms allow-discrete,
+    display 220ms allow-discrete;
+}
+dialog.project-dialog:not([open]) {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+  transition-duration: 160ms;
+}
+@starting-style {
+  dialog.project-dialog[open] {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+}
+dialog.project-dialog::backdrop {
+  background: rgb(15 26 43 / 0.72);
+  backdrop-filter: blur(6px);
+  transition:
+    opacity 220ms ease,
+    overlay 220ms allow-discrete,
+    display 220ms allow-discrete;
+}
+@starting-style {
+  dialog.project-dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  dialog.project-dialog,
+  dialog.project-dialog:not([open]) {
+    transform: none;
+  }
+}
+
+/* Elementos que entram (WhatsApp flutuante, menu) */
+.float-in {
+  transition:
+    opacity 300ms var(--ease-out-strong),
+    transform 300ms var(--ease-out-strong);
+}
+.float-in[data-visible="false"] {
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .float-in[data-visible="false"] {
+    transform: none;
+  }
+}
+
+/* Cursor de prancheta */
+.cursor-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+}
+.cursor-tag {
+  transition:
+    opacity 150ms var(--ease-out-strong),
+    transform 150ms var(--ease-out-strong);
+}
+.cursor-tag[data-visible="false"] {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Assinatura do rodapé: degradê vertical azul para prateado */
+.wordmark {
+  background-image: linear-gradient(
+    180deg,
+    #3d6fa3 8%,
+    #6f97bd 30%,
+    #aebccb 52%,
+    #dfe4ea 64%,
+    #9aa8b8 78%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Hero parado: a página sobe por cima e a foto escurece aos poucos */
+@keyframes hero-dim {
+  to {
+    opacity: 0.55;
+  }
+}
+@keyframes hero-sink {
+  to {
+    transform: translateY(-6%) scale(0.97);
+    opacity: 0.35;
+  }
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-dim {
+      animation: hero-dim linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100dvh;
+    }
+    .hero-sink {
+      animation: hero-sink linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100dvh;
+    }
+  }
+}
+
+/* Barra de rolagem invisível: a página continua rolando normalmente */
+html,
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* ------------------------------------------------------------------
+   Serviços: prancha azul com grade milimetrada
+   ------------------------------------------------------------------ */
+.blueprint {
+  background-image:
+    linear-gradient(rgb(152 191 219 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(152 191 219 / 0.07) 1px, transparent 1px),
+    linear-gradient(rgb(152 191 219 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(152 191 219 / 0.035) 1px, transparent 1px);
+  background-size:
+    96px 96px,
+    96px 96px,
+    24px 24px,
+    24px 24px;
+  background-position: -1px -1px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .svc-include {
+    animation: fade-up 500ms var(--ease-out-expo) both;
+    animation-delay: calc(400ms + var(--i, 0) * 80ms);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Equipe: troca de retrato por recorte
+   ------------------------------------------------------------------ */
+.team-frame {
+  clip-path: inset(0 0 0 0);
+  z-index: 1;
+}
+.team-frame[data-active="false"] {
+  clip-path: inset(0 0 100% 0);
+  z-index: 0;
+}
+.team-frame[data-active="true"] {
+  z-index: 2;
+}
+.team-frame img {
+  filter: grayscale(1) contrast(1.05);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .team-frame {
+    transition: clip-path 700ms var(--ease-in-out-strong);
+  }
+  .team-frame[data-active="false"] {
+    transition-delay: 700ms;
+    transition-duration: 0ms;
+  }
+  .team-frame img {
+    transition: transform 1200ms var(--ease-out-expo);
+  }
+  .team-frame[data-active="false"] img {
+    transform: scale(1.08);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .team-frame[data-active="false"] {
+    opacity: 0;
+    clip-path: none;
+  }
+  .team-frame {
+    transition: opacity 250ms ease;
+  }
+}
+.portrait-sm {
+  filter: grayscale(1) contrast(1.05);
+}
+
+/* ------------------------------------------------------------------
+   Pré-briefing em frase: lacunas são botões com cara de campo
+   ------------------------------------------------------------------ */
+.blank {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+  margin: 0 0.06em;
+  padding: 0 0.22em 0.02em;
+  font: inherit;
+  letter-spacing: inherit;
+  color: var(--color-aco);
+  background-color: rgb(47 95 143 / 0.08);
+  background-image: repeating-linear-gradient(90deg, currentColor 0 6px, transparent 6px 11px);
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  cursor: pointer;
+  transition:
+    color 200ms ease,
+    background-color 200ms ease,
+    box-shadow 200ms ease;
+}
+/* Área de toque de 44px sem mudar o desenho do espaço em branco */
+.blank {
+  position: relative;
+}
+.blank::before {
+  content: "";
+  position: absolute;
+  inset: -2px 0;
+}
+.blank:hover {
+  background-color: rgb(47 95 143 / 0.14);
+}
+.blank.is-filled {
+  background-color: transparent;
+  background-image: linear-gradient(var(--color-aco), var(--color-aco));
+}
+.blank.is-filled:hover {
+  background-color: rgb(47 95 143 / 0.08);
+}
+.blank.is-active {
+  color: var(--color-nevoa);
+  background-color: var(--color-aco);
+  background-image: none;
+}
+.blank.is-invalid:not(.is-active) {
+  box-shadow: inset 0 0 0 1.5px var(--color-aco);
+}
+.blank:focus-visible {
+  outline: 2px solid var(--color-aco);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .blank.is-filled .blank-text {
+    animation: fade-up 400ms var(--ease-out-expo) both;
+  }
+  .tray-step {
+    animation: fade-up 360ms var(--ease-out-strong) both;
+  }
+  .tray-step .tray-option {
+    animation: fade-up 360ms var(--ease-out-strong) both;
+  }
+  .tray-step .tray-option:nth-child(2) { animation-delay: 30ms; }
+  .tray-step .tray-option:nth-child(3) { animation-delay: 60ms; }
+  .tray-step .tray-option:nth-child(4) { animation-delay: 90ms; }
+  .tray-step .tray-option:nth-child(5) { animation-delay: 120ms; }
+}
+.send-ready {
+  box-shadow: 0 0 0 4px rgb(47 95 143 / 0.18);
+}

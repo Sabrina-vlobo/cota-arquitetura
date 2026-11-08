@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>COTA Arquitetura · Arquitetura e interiores sob medida</title>
+    <meta
+      name="description"
+      content="Arquitetura e interiores sob medida para casas de alto padrão em São Paulo, do primeiro traço à entrega da obra. Case fictício de portfólio."
+    />
+    <meta name="theme-color" content="#0F1A2B" />
+    <meta name="color-scheme" content="light" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="COTA Arquitetura" />
+    <meta property="og:title" content="COTA Arquitetura · Espaços que respiram com você" />
+    <meta
+      property="og:description"
+      content="Landing page de um escritório de arquitetura de alto padrão. Case fictício de portfólio, em React, TypeScript e Tailwind."
+    />
+    <meta property="og:image" content="%SITE_URL%/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Fachada de uma residência contemporânea com o logotipo COTA Arquitetura" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script>
+      // A abertura do hero roda só na primeira visita da sessão.
+      try {
+        if (sessionStorage.getItem("cota-intro")) document.documentElement.classList.add("no-intro");
+        sessionStorage.setItem("cota-intro", "1");
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

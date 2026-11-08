@@ -1,0 +1,101 @@
+{
+  "campo-itu": {
+    "widths": [
+      640,
+      1000,
+      1064
+    ],
+    "width": 1064,
+    "height": 840,
+    "color": "#7e8a7e"
+  },
+  "campos-jordao": {
+    "widths": [
+      640,
+      1000,
+      1496
+    ],
+    "width": 1496,
+    "height": 840,
+    "color": "#707263"
+  },
+  "cantareira": {
+    "widths": [
+      640,
+      1000,
+      1600,
+      1850
+    ],
+    "width": 1850,
+    "height": 2576,
+    "color": "#5e6455"
+  },
+  "casa-lagoa": {
+    "widths": [
+      960,
+      1600,
+      2400,
+      3200
+    ],
+    "width": 3840,
+    "height": 2160,
+    "color": "#31374c"
+  },
+  "equipe-caio": {
+    "widths": [
+      400,
+      608
+    ],
+    "width": 608,
+    "height": 800,
+    "color": "#737373"
+  },
+  "equipe-helena": {
+    "widths": [
+      400,
+      608
+    ],
+    "width": 608,
+    "height": 800,
+    "color": "#393939"
+  },
+  "equipe-marina": {
+    "widths": [
+      400,
+      608
+    ],
+    "width": 608,
+    "height": 800,
+    "color": "#464646"
+  },
+  "equipe-rafael": {
+    "widths": [
+      400,
+      608
+    ],
+    "width": 608,
+    "height": 800,
+    "color": "#494949"
+  },
+  "higienopolis": {
+    "widths": [
+      640,
+      1000,
+      1064
+    ],
+    "width": 1064,
+    "height": 840,
+    "color": "#9c9686"
+  },
+  "jardim-europa": {
+    "widths": [
+      640,
+      1000,
+      1600,
+      2200
+    ],
+    "width": 2576,
+    "height": 1449,
+    "color": "#827d74"
+  }
+}
